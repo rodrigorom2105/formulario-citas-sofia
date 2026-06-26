@@ -28,9 +28,10 @@ export default function Calendar({ selected, onSelect }: CalendarProps) {
   const isDisabledDay = (date: Date) => {
     const dateStr = toLocalDateStr(date);
     return (
-      dateStr <= todayStr || // hoy y dias pasados
-      dateStr > maxDateStr || // mas de 30 dias
-      isWeekend(date) // sabados y domingos
+      dateStr <= todayStr ||
+      dateStr > maxDateStr ||
+      isWeekend(date) ||
+      date.getDay() === 3 // miércoles
     );
   };
 

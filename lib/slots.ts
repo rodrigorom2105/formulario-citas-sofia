@@ -27,10 +27,9 @@ export function businessToday(): string {
  * (lunes a viernes, sin festivos).
  */
 export function isBusinessDay(date: string): boolean {
-  // parse en UTC para evitar problemas de timezone al solo evaluar el dia
   const [y, m, d] = date.split("-").map(Number);
   const dow = new Date(Date.UTC(y, m - 1, d)).getUTCDay();
-  return dow >= 1 && dow <= 5; // 0 = domingo, 6 = sabado
+  return dow >= 1 && dow <= 5 && dow !== 3; // excluye fines de semana y miércoles
 }
 
 /**
