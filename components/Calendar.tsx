@@ -1,7 +1,7 @@
 "use client";
 
 import { DayPicker } from "react-day-picker";
-import { addDays, isWeekend, startOfDay } from "date-fns";
+import { addDays, isWeekend } from "date-fns";
 import { es } from "date-fns/locale";
 import "react-day-picker/style.css";
 
@@ -10,15 +10,26 @@ interface CalendarProps {
   onSelect: (date: Date) => void;
 }
 
+/** Convierte un Date a "YYYY-MM-DD" usando la hora local del dispositivo */
+function toLocalDateStr(date: Date): string {
+  const y = date.getFullYear();
+  const m = String(date.getMonth() + 1).padStart(2, "0");
+  const d = String(date.getDate()).padStart(2, "0");
+  return `${y}-${m}-${d}`;
+}
+
 export default function Calendar({ selected, onSelect }: CalendarProps) {
-  const today = startOfDay(new Date());
-  const tomorrow = addDays(today, 1);
+  const today = new Date();
+  const todayStr = toLocalDateStr(today);
   const maxDate = addDays(today, 30);
+  const maxDateStr = toLocalDateStr(maxDate);
+  const tomorrow = addDays(today, 1);
 
   const isDisabledDay = (date: Date) => {
+    const dateStr = toLocalDateStr(date);
     return (
-      date <= today || // hoy y dias pasados
-      date > maxDate || // mas de 30 dias
+      dateStr <= todayStr || // hoy y dias pasados
+      dateStr > maxDateStr || // mas de 30 dias
       isWeekend(date) // sabados y domingos
     );
   };

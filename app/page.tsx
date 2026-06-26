@@ -86,7 +86,7 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+    <main className="min-h-screen bg-gray-50 flex items-start justify-center p-4 pt-8 sm:items-center sm:pt-4">
       <div className="w-full max-w-md bg-white rounded-2xl shadow-sm border border-gray-100 p-6">
         {/* Header */}
         {step !== "confirmation" && (
