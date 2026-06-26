@@ -30,20 +30,26 @@ body {
   --rdp-disabled-opacity: 1;
 }
 
-/* Días disponibles — 2 clases > especificidad de la librería (1 clase) */
+/* Encabezado del mes y dias de la semana — color explícito */
+.rdp-caption_label,
+.rdp-month_caption {
+  color: #111827 !important;
+}
+
+/* Días disponibles */
 .rdp-day:not(.rdp-disabled) .rdp-day_button {
   color: #111827 !important;
   font-weight: 600;
 }
 
-/* Días deshabilitados */
+/* Días deshabilitados — gris medio, visible pero claramente distinto */
 .rdp-disabled .rdp-day_button {
-  color: #d1d5db !important;
+  color: #9ca3af !important;
   font-weight: 400;
 }
 
-/* Hoy */
-.rdp-today:not(.rdp-disabled) .rdp-day_button {
+/* Hoy — 3 clases gana a las reglas de 2 clases de arriba */
+.rdp-day.rdp-today .rdp-day_button {
   color: #2563eb !important;
 }
 
