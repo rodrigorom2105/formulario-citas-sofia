@@ -25,24 +25,31 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
-/* react-day-picker: contraste explícito entre días disponibles y deshabilitados */
-.rdp-day_button {
-  color: #111827; /* gris casi negro para días disponibles */
+/* react-day-picker: desactiva el opacity para usar colores explícitos */
+.rdp-root {
+  --rdp-disabled-opacity: 1;
+}
+
+/* Días disponibles — 2 clases > especificidad de la librería (1 clase) */
+.rdp-day:not(.rdp-disabled) .rdp-day_button {
+  color: #111827 !important;
   font-weight: 600;
 }
 
+/* Días deshabilitados */
 .rdp-disabled .rdp-day_button {
-  color: #d1d5db; /* gris claro para días deshabilitados */
-  opacity: 1 !important; /* cancelar el opacity: 0.5 por defecto */
+  color: #d1d5db !important;
   font-weight: 400;
 }
 
+/* Hoy */
 .rdp-today:not(.rdp-disabled) .rdp-day_button {
-  color: #2563eb; /* azul para hoy */
+  color: #2563eb !important;
 }
 
+/* Día seleccionado */
 .rdp-selected .rdp-day_button {
-  color: #ffffff;
-  background-color: #2563eb;
-  border-color: #2563eb;
+  background-color: #2563eb !important;
+  border-color: #2563eb !important;
+  color: #ffffff !important;
 }
