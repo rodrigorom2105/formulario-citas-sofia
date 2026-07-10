@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { addDays, isWeekend } from "date-fns";
 import { es } from "date-fns/locale";
@@ -25,13 +26,33 @@ export default function Calendar({ selected, onSelect }: CalendarProps) {
   const maxDateStr = toLocalDateStr(maxDate);
   const tomorrow = addDays(today, 1);
 
+  const [blockedDates, setBlockedDates] = useState<Set<string>>(new Set());
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/blocked-dates")
+      .then((res) => (res.ok ? res.json() : { dates: [] }))
+      .then((data) => {
+        if (active && Array.isArray(data.dates)) {
+          setBlockedDates(new Set(data.dates));
+        }
+      })
+      .catch(() => {
+        // El servidor valida los bloqueos de todos modos en /api/book
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
   const isDisabledDay = (date: Date) => {
     const dateStr = toLocalDateStr(date);
     return (
       dateStr <= todayStr ||
       dateStr > maxDateStr ||
       isWeekend(date) ||
-      date.getDay() === 3 // miércoles
+      date.getDay() === 3 || // miércoles
+      blockedDates.has(dateStr)
     );
   };
 

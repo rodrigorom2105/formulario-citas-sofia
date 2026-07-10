@@ -29,7 +29,17 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    const appointments = await sheetsStore.getByDate(date);
+    const [blocked, appointments] = await Promise.all([
+      sheetsStore.getBlockedDates(),
+      sheetsStore.getByDate(date),
+    ]);
+
+    // Dia bloqueado: ningun horario disponible
+    if (blocked.has(date)) {
+      const slots = SLOTS.map((time) => ({ time, available: false }));
+      return NextResponse.json({ date, slots, blocked: true });
+    }
+
     const takenTimes = new Set(appointments.map((a) => a.time));
 
     const slots = SLOTS.map((time) => ({

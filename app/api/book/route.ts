@@ -22,7 +22,16 @@ export async function POST(request: NextRequest) {
   const { date, time, fullName, company, phone, email } = parsed.data;
 
   try {
-    // 1. Verificar si el usuario ya tiene una cita activa
+    // 1. Verificar que la fecha no este bloqueada
+    const blocked = await sheetsStore.getBlockedDates();
+    if (blocked.has(date)) {
+      return NextResponse.json(
+        { error: "Esa fecha no esta disponible para agendar." },
+        { status: 409 }
+      );
+    }
+
+    // 2. Verificar si el usuario ya tiene una cita activa
     const hasActive = await sheetsStore.hasFutureAppointment(phone, email);
     if (hasActive) {
       return NextResponse.json(
@@ -31,7 +40,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. Verificar si el slot sigue disponible (check antes de escribir)
+    // 3. Relectura anti-colision: verificar el slot justo antes de escribir
     const taken = await sheetsStore.isSlotTaken(date, time);
     if (taken) {
       return NextResponse.json(
@@ -40,22 +49,20 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Crear la cita
-    const appointment = {
+    // 4. Crear la cita (el store genera citaId, status, source y timestamps)
+    const created = await sheetsStore.create({
       date,
       time,
       fullName,
       company,
       phone,
       email,
-      createdAt: new Date().toISOString(),
-    };
-
-    await sheetsStore.create(appointment);
+    });
 
     return NextResponse.json({
       message: "Cita agendada exitosamente",
       appointment: {
+        citaId: created.citaId,
         date,
         time,
         fullName,

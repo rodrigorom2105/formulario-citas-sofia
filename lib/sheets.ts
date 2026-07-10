@@ -1,17 +1,30 @@
 import { google } from "googleapis";
 
-/** Nombre de la hoja dentro del Google Sheet */
+/** Nombre de la hoja de citas dentro del Google Sheet */
 export const SHEET_NAME = "Citas";
 
-/** Columnas en orden — deben coincidir con los encabezados del Sheet */
+/** Nombre de la hoja de fechas bloqueadas */
+export const BLOQUEOS_SHEET_NAME = "Bloqueos";
+
+/**
+ * Columnas de la hoja "Citas" en orden (A→N) — deben coincidir con los
+ * encabezados del Sheet. Este esquema lo comparten el bot (n8n) y la webapp.
+ */
 export const COLUMNS = [
+  "citaId",
   "createdAt",
+  "updatedAt",
   "date",
   "time",
+  "status",
+  "source",
+  "conversationKey",
+  "leadId",
   "fullName",
   "company",
   "phone",
   "email",
+  "n8nExecutionId",
 ] as const;
 
 /**
