@@ -91,7 +91,7 @@ export default function BookingForm({
 
   const inputClass = (field: keyof BookingInput) =>
     [
-      "w-full px-3 py-2 border rounded-lg text-sm outline-none transition-colors",
+      "w-full px-3 py-2 border rounded-lg text-sm outline-none transition-colors text-gray-900 placeholder:text-gray-400",
       errors[field]
         ? "border-red-400 focus:border-red-500"
         : "border-gray-300 focus:border-blue-500",
